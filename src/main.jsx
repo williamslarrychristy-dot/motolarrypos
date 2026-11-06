@@ -1,6 +1,6 @@
 import { createRoot } from 'react-dom/client';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
-import { Component, ErrorInfo, ReactNode } from 'react';
+import { Component } from 'react';
 import App from './app/App';
 import './index.css';
 
@@ -14,18 +14,18 @@ const queryClient = new QueryClient({
   },
 });
 
-// 2. Error Boundary Component to catch hidden crashes
-class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boolean, error: Error | null }> {
-  constructor(props: { children: ReactNode }) {
+// 2. Error Boundary Component (JavaScript version)
+class ErrorBoundary extends Component {
+  constructor(props) {
     super(props);
     this.state = { hasError: false, error: null };
   }
 
-  static getDerivedStateFromError(error: Error) {
+  static getDerivedStateFromError(error) {
     return { hasError: true, error };
   }
 
-  componentDidCatch(error: Error, errorInfo: ErrorInfo) {
+  componentDidCatch(error, errorInfo) {
     console.error("React Error Boundary caught an error:", error, errorInfo);
   }
 
@@ -49,7 +49,7 @@ class ErrorBoundary extends Component<{ children: ReactNode }, { hasError: boole
 }
 
 // 3. Render WITHOUT StrictMode
-createRoot(document.getElementById('root')!).render(
+createRoot(document.getElementById('root')).render(
   <ErrorBoundary>
     <QueryClientProvider client={queryClient}>
       <App />
