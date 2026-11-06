@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import { ProtectedRoute, GuestRoute } from '../routes/AppRoutes';
 import { ROLES } from '../constants/roles';
 import AdminLayout from '../layouts/AdminLayout';
@@ -22,35 +22,36 @@ import AppShellLayout from '../layouts/AppShellLayout';
 
 export default function AppRoutes() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
+    <Routes>
+      {/* Redirect root to admin dashboard */}
+      <Route path="/" element={<Navigate to="/admin" replace />} />
 
-        <Route path="/admin" element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]}><AdminLayout /></ProtectedRoute>}>
-          <Route index element={<AdminDashboard />} />
-          <Route path="products" element={<ProductsPage />} />
-          <Route path="products/:id" element={<ProductDetail />} />
-          <Route path="inventory" element={<InventoryPage />} />
-          <Route path="sales" element={<SalesHistoryPage />} />
-          <Route path="sales/:id" element={<SaleDetailPage />} />
-          <Route path="reports" element={<AnalyticsPage />} />
-          <Route path="reports/daily" element={<DailySalesReport />} />
-          <Route path="reports/products" element={<ProductReport />} />
-          <Route path="reports/inventory" element={<InventoryReport />} />
-          <Route path="settings/business" element={<BusinessSettings />} />
-          <Route path="settings/users" element={<UserSettings />} />
-        </Route>
+      <Route path="/login" element={<GuestRoute><LoginPage /></GuestRoute>} />
 
-        <Route path="/pos" element={<ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.CASHIER]}><CashierLayout /></ProtectedRoute>}>
-          <Route index element={<POSPage />} />
-        </Route>
+      <Route path="/admin" element={<ProtectedRoute allowedRoles={[ROLES.ADMIN]}><AdminLayout /></ProtectedRoute>}>
+        <Route index element={<AdminDashboard />} />
+        <Route path="products" element={<ProductsPage />} />
+        <Route path="products/:id" element={<ProductDetail />} />
+        <Route path="inventory" element={<InventoryPage />} />
+        <Route path="sales" element={<SalesHistoryPage />} />
+        <Route path="sales/:id" element={<SaleDetailPage />} />
+        <Route path="reports" element={<AnalyticsPage />} />
+        <Route path="reports/daily" element={<DailySalesReport />} />
+        <Route path="reports/products" element={<ProductReport />} />
+        <Route path="reports/inventory" element={<InventoryReport />} />
+        <Route path="settings/business" element={<BusinessSettings />} />
+        <Route path="settings/users" element={<UserSettings />} />
+      </Route>
 
-        <Route path="/profile" element={<ProtectedRoute><AppShellLayout /></ProtectedRoute>}>
-          <Route index element={<ProfilePage />} />
-        </Route>
+      <Route path="/pos" element={<ProtectedRoute allowedRoles={[ROLES.ADMIN, ROLES.CASHIER]}><CashierLayout /></ProtectedRoute>}>
+        <Route index element={<POSPage />} />
+      </Route>
 
-        <Route path="*" element={<Navigate to="/login" replace />} />
-      </Routes>
-    </BrowserRouter>
+      <Route path="/profile" element={<ProtectedRoute><AppShellLayout /></ProtectedRoute>}>
+        <Route index element={<ProfilePage />} />
+      </Route>
+
+      <Route path="*" element={<Navigate to="/login" replace />} />
+    </Routes>
   );
 }
